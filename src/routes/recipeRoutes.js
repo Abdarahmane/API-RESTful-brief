@@ -1,41 +1,39 @@
-import express from "express";
-import recipeController from "../controllers/Recipe.js"; 
+import express from 'express';
+import recipeController from '../controllers/Recipe.js';
 
 import {
   validateCreateRecipe,
   validateUpdateRecipe,
   validateDeleteRecipe,
   validate,
-} from "../validators/Validator.js"; 
+} from '../validators/Validator.js';
 
+const router = express.Router();
 
-const router = express.Router(); 
-
-
-router.get("/recettes", recipeController.getAllRecipes);
+router.get('/recettes', recipeController.getAllRecipes);
 router.get(
-  "/recettes/:id",
+  '/recettes/:id',
   validateUpdateRecipe(),
   validate,
-  recipeController.getRecipeById,
+  recipeController.getRecipeById
 );
 router.post(
-  "/recettes",
+  '/recettes',
   validateCreateRecipe(),
   validate,
-  recipeController.createRecipe,
+  recipeController.createRecipe
 );
 router.put(
-  "/recettes/:id",
+  '/recettes/:id',
   validateUpdateRecipe(),
   validate,
-  recipeController.updateRecipe,
+  recipeController.updateRecipe
 );
 router.delete(
-  "/recettes/:id",
+  '/recettes/:id',
   validateDeleteRecipe(),
   validate,
-  recipeController.deleteRecipe,
+  recipeController.deleteRecipe
 );
 
 export default router;

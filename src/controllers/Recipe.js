@@ -1,37 +1,36 @@
-
-import RecipeModel from "../models/Recipe.js";
+import RecipeModel from '../models/Recipe.js';
 
 const validateRecipeFields = (fields) => {
   const errors = [];
-  if (!fields.titre || fields.titre.trim() === "") {
+  if (!fields.titre || fields.titre.trim() === '') {
     errors.push({
-      type: "field",
-      msg: "Le titre ne peut pas être vide!",
-      path: "titre",
-      location: "body",
+      type: 'field',
+      msg: 'Le titre ne peut pas être vide!',
+      path: 'titre',
+      location: 'body',
     });
   }
-  if (!fields.ingredients || fields.ingredients.trim() === "") {
+  if (!fields.ingredients || fields.ingredients.trim() === '') {
     errors.push({
-      type: "field",
-      msg: "Les ingrédients ne peuvent pas être vides!",
-      path: "ingredients",
-      location: "body",
+      type: 'field',
+      msg: 'Les ingrédients ne peuvent pas être vides!',
+      path: 'ingredients',
+      location: 'body',
     });
   }
-  if (!fields.type || fields.type.trim() === "") {
+  if (!fields.type || fields.type.trim() === '') {
     errors.push({
-      type: "field",
-      msg: "Le type ne peut pas être vide!",
-      path: "type",
-      location: "body",
+      type: 'field',
+      msg: 'Le type ne peut pas être vide!',
+      path: 'type',
+      location: 'body',
     });
   }
   return errors;
 };
 
 export const createRecipe = async (req, res) => {
-  const { titre } = req.body; 
+  const { titre } = req.body;
 
   const errors = validateRecipeFields(req.body);
   if (errors.length > 0) {
@@ -41,7 +40,9 @@ export const createRecipe = async (req, res) => {
   try {
     const existingRecipe = await RecipeModel.getRecipeByTitle(titre);
     if (existingRecipe) {
-      return res.status(400).json({ message: "Une recette avec ce titre existe déjà." });
+      return res
+        .status(400)
+        .json({ message: 'Une recette avec ce titre existe déjà.' });
     }
 
     const newRecipe = await RecipeModel.createRecipe(req.body);
@@ -65,7 +66,7 @@ export const getRecipeById = async (req, res) => {
   try {
     const recipe = await RecipeModel.getRecipeById(id);
     if (!recipe) {
-      return res.status(404).json({ message: "Recette non trouvée." });
+      return res.status(404).json({ message: 'Recette non trouvée.' });
     }
     return res.status(200).json(recipe);
   } catch (err) {
@@ -84,7 +85,7 @@ export const updateRecipe = async (req, res) => {
   try {
     const updatedRecipe = await RecipeModel.updateRecipe(id, req.body);
     if (!updatedRecipe) {
-      return res.status(404).json({ message: "Recette non trouvée." });
+      return res.status(404).json({ message: 'Recette non trouvée.' });
     }
     return res.status(200).json(updatedRecipe);
   } catch (err) {
@@ -97,9 +98,9 @@ export const deleteRecipe = async (req, res) => {
   try {
     const deleted = await RecipeModel.deleteRecipe(id);
     if (!deleted) {
-      return res.status(404).json({ message: "Recette non trouvée." });
+      return res.status(404).json({ message: 'Recette non trouvée.' });
     }
-    return res.status(200).json({ message: "Recette supprimée avec succès." });
+    return res.status(200).json({ message: 'Recette supprimée avec succès.' });
   } catch (err) {
     return res.status(500).json({ message: err.message });
   }

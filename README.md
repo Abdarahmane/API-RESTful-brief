@@ -122,12 +122,12 @@ Cette API permet de gérer les recettes dans une application de gestion de recet
 1. Clonez le dépôt :
 
    ```bash
-   git clone https://github.com/Fatoumacisse99/APIGestion_Recettes.git
+   git clone https://github.com/Abdarahmane/API-RESTful-project.git
 
  2. Accédez au répertoire du projet :
 
 ```bash
-cd APIGestion_Recettes
+cd API-RESTful-project
 ```
 3. Installez les dépendances :
 

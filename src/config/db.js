@@ -1,6 +1,6 @@
 /* eslint-disable */
-import mysql from "mysql2/promise";
-import dotenv from "dotenv";
+import mysql from 'mysql2/promise';
+import dotenv from 'dotenv';
 
 dotenv.config();
 const db = mysql.createPool({
@@ -12,9 +12,8 @@ const db = mysql.createPool({
   connectionLimit: 2,
   queueLimit: 0,
 });
-db
-.getConnection()
-.then(() => console.log('Connected to the database.'))
-.catch((err) => console.error('Database connection error:', err));
+db.getConnection()
+  .then(() => console.log('Connected to the database.'))
+  .catch((err) => console.error('Database connection error:', err));
 
 export default db;

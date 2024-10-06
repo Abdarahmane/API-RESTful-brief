@@ -3,20 +3,19 @@ import db from "../src/config/db.js";
 
 describe("Recipe Model with Real Database", () => {
   beforeEach(async () => {
-    
+    // Nettoie la base de données avant chaque test
     await db.query("DELETE FROM recettes");
   });
 
-  
   it("01 - should create a new recipe", async () => {
     const uniqueTitle = "New Recipe " + Date.now();
     const newRecipe = {
-      titre: uniqueTitle,          
+      titre: uniqueTitle,
       ingredients: "Some ingredients",
-      type: "Main",               
+      type: "Main",
     };
     const result = await RecipeModel.createRecipe(newRecipe);
-    expect(result.id).toBeDefined(); 
+    expect(result.id).toBeDefined();
   });
 
   it("02 - should retrieve a recipe by ID", async () => {
