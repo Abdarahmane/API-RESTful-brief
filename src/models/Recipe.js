@@ -1,87 +1,91 @@
-import db from "../config/db.js"; // Assurez-vous que le chemin est correct
+import db from "../config/db.js"; 
+import { validationResult } from "express-validator";
 
-// Obtenir une recette par titre
-const getRecipeByTitle = async (titre) => {
-  const query = "SELECT * FROM recettes WHERE titre = ?";
-  const [rows] = await db.query(query, [titre]);
-  return rows[0] || null;
-};
-
-// Créer une nouvelle recette
-const createRecipe = async (recipeData) => {
-  const { titre, ingredients, type } = recipeData;
-  const query = "INSERT INTO recettes (titre, ingredients, type) VALUES (?, ?, ?)";
+class RecipeModel {
   
-  try {
-    const [result] = await db.query(query, [titre, ingredients, type]);
-    return { id: result.insertId, titre, ingredients, type };
-  } catch (error) {
-    console.error("Erreur lors de la création de la recette:", error);
-    throw new Error("Erreur lors de la création de la recette");
-  }
-};
-
-// Obtenir toutes les recettes
-const getAllRecipes = async () => {
-  const query = "SELECT * FROM recettes";
-  try {
-    const [rows] = await db.query(query);
-    return rows;
-  } catch (error) {
-    console.error("Erreur lors de la récupération des recettes:", error);
-    throw new Error("Erreur lors de la récupération des recettes");
-  }
-};
-
-// Obtenir une recette par ID
-const getRecipeById = async (id) => {
-  if (isNaN(id) || id <= 0) {
-    throw new Error("ID invalide. Il doit être un entier positif.");
-  }
-  const query = "SELECT * FROM recettes WHERE id = ?";
-  const [rows] = await db.query(query, [id]);
-  return rows[0] || null;
-};
-
-// Mettre à jour une recette
-const updateRecipe = async (id, recipeData) => {
-  if (isNaN(id) || id <= 0) {
-    throw new Error("ID invalide. Il doit être un entier positif.");
+  async getRecipeByTitle(titre) {
+    const query = "SELECT * FROM recettes WHERE titre = ?";
+    const [rows] = await db.query(query, [titre]);
+    return rows[0] || null;
   }
 
-  const { titre, ingredients, type } = recipeData;
-  const query = "UPDATE recettes SET titre = ?, ingredients = ?, type = ? WHERE id = ?";
-  const [result] = await db.query(query, [titre, ingredients, type, id]);
+ 
+  async createRecipe(recipeData) {
+    const errors = validationResult(recipeData);
+    if (!errors.isEmpty()) {
+      throw new Error("Erreur de validation des données : " + JSON.stringify(errors.array()));
+    }
 
-  if (result.affectedRows === 0) {
-    return null; // L'ID n'existe pas
+    const { titre, ingredients, type } = recipeData;
+    const query = "INSERT INTO recettes (titre, ingredients, type) VALUES (?, ?, ?)";
+
+    try {
+      const [result] = await db.query(query, [titre, ingredients, type]);
+      return { id: result.insertId, titre, ingredients, type };
+    } catch (error) {
+      console.error("Erreur lors de la création de la recette:", error);
+      throw new Error("Erreur lors de la création de la recette");
+    }
+  }
+  async getAllRecipes() {
+    const query = "SELECT * FROM recettes";
+    try {
+      const [rows] = await db.query(query);
+      return rows;
+    } catch (error) {
+      console.error("Erreur lors de la récupération des recettes:", error);
+      throw new Error("Erreur lors de la récupération des recettes");
+    }
   }
 
-  return { id, titre, ingredients, type };
-};
-
-// Supprimer une recette
-const deleteRecipe = async (id) => {
-  if (isNaN(id) || id <= 0) {
-    throw new Error("ID invalide. Il doit être un entier positif.");
+  
+  async getRecipeById(id) {
+    if (isNaN(id) || id <= 0) {
+      throw new Error("ID invalide. Il doit être un entier positif.");
+    }
+    const query = "SELECT * FROM recettes WHERE id = ?";
+    const [rows] = await db.query(query, [id]);
+    return rows[0] || null;
   }
 
-  const query = "DELETE FROM recettes WHERE id = ?";
-  const [result] = await db.query(query, [id]);
 
-  if (result.affectedRows === 0) {
-    return null; // Aucune ligne supprimée, l'ID n'existe pas
+  async updateRecipe(id, recipeData) {
+    const errors = validationResult(recipeData);
+    if (!errors.isEmpty()) {
+      throw new Error("Erreur de validation des données : " + JSON.stringify(errors.array()));
+    }
+
+    if (isNaN(id) || id <= 0) {
+      throw new Error("ID invalide. Il doit être un entier positif.");
+    }
+
+    const { titre, ingredients, type } = recipeData;
+    const query = "UPDATE recettes SET titre = ?, ingredients = ?, type = ? WHERE id = ?";
+    const [result] = await db.query(query, [titre, ingredients, type, id]);
+
+    if (result.affectedRows === 0) {
+      return null; 
+    }
+
+    return { id, titre, ingredients, type };
   }
 
-  return { message: "Recette supprimée avec succès" };
-};
+  
+  async deleteRecipe(id) {
+    if (isNaN(id) || id <= 0) {
+      throw new Error("ID invalide. Il doit être un entier positif.");
+    }
 
-// Exportation des fonctions du modèle
-export default {
-  getRecipeByTitle,
-  createRecipe,
-  getAllRecipes,
-  getRecipeById,
-  updateRecipe,
-  deleteRecipe,
-};
+    const query = "DELETE FROM recettes WHERE id = ?";
+    const [result] = await db.query(query, [id]);
+
+    if (result.affectedRows === 0) {
+      return null; 
+    }
+
+    return { message: "Recette supprimée avec succès" };
+  }
+}
+
+
+export default new RecipeModel();
