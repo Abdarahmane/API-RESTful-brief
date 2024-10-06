@@ -57,6 +57,7 @@ Cette API permet de gérer les recettes dans une application de gestion de recet
       "type": "Plat principal"
     }
     ```
+
   - **Exemple de réponse** :
     ```json
     {
@@ -136,17 +137,28 @@ npm install
 
 4. Configurez la base de données :
 
-Assurez-vous que Mysql est en cours d'exécution sur votre machine locale.
-    Mettez les paramètres de connexion dans db.js.
-    Créez un fichier .env avec la configuration de votre base de données
+- Assurez-vous que Mysql est en cours d'exécution sur votre machine locale.
+- Mettez les paramètres de connexion dans db.js.
+- Créez un fichier .env avec la configuration de votre base de données :
 
 ```bash
 
 DB_HOST=localhost
 DB_USER=root
+DB_PASSWORD=mypassWord
+DB_NAME=db_name 
+DB_PORT=port_spécifier
+
+```
+ 
+- si vous souhaitez connecter avec l'image docker
+
+```bash
+DB_HOST=db
+DB_USER=root
 DB_PASSWORD= yourpassword
-DB_NAME=yourdb
-DB_PORT= port
+DB_NAME=db_name
+DB_PORT= port_spécifier
 ```
 5. Démarrez le serveur :
 
@@ -183,11 +195,6 @@ Pour lancer l'API avec Docker, suivez ces étapes :
 ```bash
 docker build -t recette-api .
 ```
-Tester l'Image Localement : Après avoir construit l'image, vous pouvez la tester localement en exécutant la commande suivante :
-   ```bash
-   docker run -p 3000:3000 recette-api
-   ```
-   Cela exposera votre API sur le port 3000
 
 * Lancer le Conteneur avec Docker Compose : Pour lancer le conteneur en utilisant docker-compose, exécutez cette commande :
   ```bash
