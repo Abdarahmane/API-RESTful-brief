@@ -137,9 +137,17 @@ npm install
 
 4. Configurez la base de données :
 
-- Assurez-vous que Mysql est en cours d'exécution sur votre machine locale.
-- Mettez les paramètres de connexion dans db.js.
-- Créez un fichier .env avec la configuration de votre base de données :
+Dans le projet le fichier .env.example faut le renommé en .env et ajouter vos identifiant pour pouvoir se conncter à la base de donnée
+
+pour se connecter sur la machine local et faire de test dans le fichier .env mettez :
+
+DB_HOST=localhost
+
+pour se connecter sur docker et faire de test dans le fichier .env mettez
+
+DB_HOST=db
+
+
 
 ```bash
 
@@ -190,13 +198,7 @@ Pour lancer l'API avec Docker, suivez ces étapes :
 
 ### 1. Construire l'image Docker
 
-À la racine de votre projet, exécutez la commande suivante pour construire l'image Docker de l'API :
-
-```bash
-docker build -t recette-api .
-```
-
-* Lancer le Conteneur avec Docker Compose : Pour lancer le conteneur en utilisant docker-compose, exécutez cette commande :
+* Pour construire l'image et Lancer le Conteneur avec Docker Compose : Pour lancer le conteneur en utilisant docker-compose, exécutez cette commande :
   ```bash
   docker-compose up --build
   ```
