@@ -38,7 +38,7 @@ Cette API permet de gérer les recettes dans une application de gestion de recet
       "id": 1,
       "titre": "Salade César revisitée",
       "ingredients": "Laitue, Poulet grillé",
-      "type": "Entrée"
+      "type": "entrée"
     }
     ```
 
