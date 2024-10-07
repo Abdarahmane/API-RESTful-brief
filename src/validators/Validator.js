@@ -7,13 +7,22 @@ const validateCreateRecipe = () => {
       .isEmpty()
       .withMessage('Le titre ne peut pas être vide!')
       .bail()
-      .isLength({ min: 5, max: 100 }) // Assurez-vous que min et max soient corrects
+      .isLength({ min: 5, max: 100 })
       .withMessage('Le titre doit comporter entre 5 et 100 caractères!'),
     check('ingredients')
       .not()
       .isEmpty()
-      .withMessage('Les ingrédients ne peuvent pas être vides!'),
-    check('type').not().isEmpty().withMessage('Le type ne peut pas être vide!'),
+      .withMessage('Les ingrédients ne peuvent pas être vides!')
+      .bail()
+      .isLength({ min: 10, max: 500 })
+      .withMessage('Les ingrédients doivent comporter entre 10 et 500 caractères!'),
+    check('type')
+      .not()
+      .isEmpty()
+      .withMessage('Le type de recette ne peut pas être vide!')
+      .bail()
+      .isIn(['entrée', 'plat', 'dessert'])
+      .withMessage("Le type de recette doit être soit 'entrée', 'plat' ou 'dessert'!"),
   ];
 };
 
@@ -26,14 +35,12 @@ const validateUpdateRecipe = () => {
       .withMessage('Le titre doit comporter entre 5 et 100 caractères!'),
     check('ingredients')
       .optional()
-      .not()
-      .isEmpty()
-      .withMessage('Les ingrédients ne peuvent pas être vides!'),
+      .isLength({ min: 10, max: 500 })
+      .withMessage('Les ingrédients doivent comporter entre 10 et 500 caractères!'),
     check('type')
       .optional()
-      .not()
-      .isEmpty()
-      .withMessage('Le type ne peut pas être vide!'),
+      .isIn(['entrée', 'plat', 'dessert'])
+      .withMessage("Le type de recette doit être soit 'entrée', 'plat' ou 'dessert'!"),
   ];
 };
 
